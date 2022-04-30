@@ -1,5 +1,6 @@
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 const _onboardingInfoHeroTag = '__onboarding_info_hero_tag__';
 
@@ -128,9 +129,44 @@ class OnboardingUsage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Usage Text',
-                    style: theme.textTheme.headline3,
+                  GestureDetector(
+                    onTap: () async {
+                      final newFiles = await AssetPicker.pickAssets(
+                        context,
+                        // useRootNavigator: false,
+                        // pageRouteBuilder: () {
+                        // },
+                        pickerConfig: AssetPickerConfig(
+                          gridCount: 3,
+                          pageSize: 120,
+                          requestType: RequestType.image,
+                          specialItemPosition: SpecialItemPosition.prepend,
+                          specialItemBuilder: (
+                            BuildContext context,
+                            AssetPathEntity? path,
+                            int length,
+                          ) {
+                            if (path?.isAll != true) {
+                              return null;
+                            }
+                            return Semantics(
+                              button: true,
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () async {},
+                                child: const Center(
+                                  child: Icon(Icons.camera_enhance, size: 42.0),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Click here to open asset picker',
+                      style: theme.textTheme.headline3,
+                    ),
                   ),
                 ],
               ),
